@@ -176,6 +176,7 @@ Change criteria for switching from SVD to Standard DNN based on comparing loss o
 ---
 
 ## 9.Results
+All the simulations have been performed in MATLAB 2024b on an Intel core i5 CPU
 
 | Method | Dataset | Accuracy (%) | Time (s) |
 |------|------|------|------|
