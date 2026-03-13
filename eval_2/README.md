@@ -32,7 +32,7 @@ Experiments are conducted on the MNIST dataset using a standard DNN architecture
 
 ---
 ## Process Flow
-![Process Flow](assets\process.jpeg)
+![Process Flow](assets/process.jpeg)
 
 
 ## Our Architecture for the project(Standard DNN)
