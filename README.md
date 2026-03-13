@@ -80,9 +80,6 @@ $$
 $$
 
 Weights are updated using gradient descent
-$$
-W^{(l)} \leftarrow W^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial W^{(l)}}
-$$
 
 ---
 
