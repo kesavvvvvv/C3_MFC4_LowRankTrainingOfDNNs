@@ -237,28 +237,31 @@ All the simulations have been performed in MATLAB 2024b on an Intel core i5 CPU
 
 
 ### SVD Training Results
-This section explains how parameters are reduced, how parameters are calculated and the actual reduction we obtained for the proposed architecture
-- Parameters are the learnable values in a neural network.
-- FLOPs- They measure how much computation a model performs.
-Below is the explaination for how **parameter count** and **FLOPs** are computed for the SVD-parameterized neural network.
+
+This section explains how parameters are reduced, how they are calculated, and the actual reduction achieved for the proposed architecture.
+
+- **Parameters** - Learnable values in a neural network  
+- **FLOPs** - Number of computations performed by the model  
+
+Below is the explanation of how **parameter count** and **FLOPs** are computed for the SVD-parameterized neural network.
+
+---
 
 ### SVD Parameterization
 
 Each fully connected layer is represented using low-rank SVD decomposition:
 
-\[
-W = U \cdot S \cdot V^T
-\]
+W = U × S × Vᵀ
 
 Where:
-- \( U \in \mathbb{R}^{d_{out} \times r} \)
-- \( V \in \mathbb{R}^{d_{in} \times r} \)
-- \( S \in \mathbb{R}^{r \times r} \) (diagonal, stored as vector)
+- U ∈ R^(d_out × r)
+- V ∈ R^(d_in × r)
+- S ∈ R^(r × r) (diagonal, stored as a vector)
 
-So instead of storing \( d_{out} \times d_{in} \), we store:
-- \( U \): \( d_{out} \cdot r \)
-- \( V \): \( d_{in} \cdot r \)
-- Singular values: \( r \)
+So instead of storing (d_out × d_in), we store:
+- U → (d_out × r)
+- V → (d_in × r)
+- Singular values → r
 
 ---
 
@@ -267,83 +270,74 @@ So instead of storing \( d_{out} \times d_{in} \), we store:
 ### Before Pruning
 
 Ranks are initialized as:
-- \( r_1 = \min(d_1, d_0) \)
-- \( r_2 = \min(d_2, d_1) \)
-- \( r_3 = \min(d_3, d_2) \)
+- r₁ = min(d₁, d₀)
+- r₂ = min(d₂, d₁)
+- r₃ = min(d₃, d₂)
 
 Total parameters:
 
-\[
-\text{Params} =
-(d_1 r_1 + d_0 r_1 + r_1) +
-(d_2 r_2 + d_1 r_2 + r_2) +
-(d_3 r_3 + d_2 r_3 + r_3)
-\]
+Params =
+(d₁ × r₁ + d₀ × r₁ + r₁) +
+(d₂ × r₂ + d₁ × r₂ + r₂) +
+(d₃ × r₃ + d₂ × r₃ + r₃)
+
+---
 
 ### After Pruning
 
 After energy-based pruning, ranks reduce to:
-- \( r_1', r_2', r_3' \)
+- r₁′, r₂′, r₃′
 
-\[
-\text{Params}_{pruned} =
-(d_1 r_1' + d_0 r_1' + r_1') +
-(d_2 r_2' + d_1 r_2' + r_2') +
-(d_3 r_3' + d_2 r_3' + r_3')
-\]
+Params_after =
+(d₁ × r₁′ + d₀ × r₁′ + r₁′) +
+(d₂ × r₂′ + d₁ × r₂′ + r₂′) +
+(d₃ × r₃′ + d₂ × r₃′ + r₃′)
 
-### Compression Ratio
+---
 
-\[
-\text{Compression Ratio} = \frac{\text{Params}_{before}}{\text{Params}_{after}}
-\]
+###  Compression Ratio
+
+Compression Ratio = Params_before / Params_after
 
 ---
 
 ## FLOPs Computation
 
-Only forward pass FLOPs per sample are considered.
+Only **forward pass FLOPs per sample** are considered.
 
 Each SVD layer performs:
-
-1. \( V^T x \) → cost ≈ \( d_{in} \cdot r \)  
-2. \( S(\cdot) \) → negligible  
-3. \( U(\cdot) \) → cost ≈ \( d_{out} \cdot r \)
+1. Vᵀx → cost ≈ d_in × r  
+2. S(·) → negligible  
+3. U(·) → cost ≈ d_out × r  
 
 Considering multiply + add → factor of 2:
 
-\[
-\text{FLOPs per layer} \approx 2 \cdot d_{in} \cdot r + 2 \cdot d_{out} \cdot r
-\]
+FLOPs per layer ≈ 2 × d_in × r + 2 × d_out × r
 
 ---
 
 ### Before Pruning
 
-\[
-\text{FLOPs}_{before} =
-(2 d_0 r_1 + 2 d_1 r_1) +
-(2 d_1 r_2 + 2 d_2 r_2) +
-(2 d_2 r_3 + 2 d_3 r_3)
-\]
+FLOPs_before =
+(2 × d₀ × r₁ + 2 × d₁ × r₁) +
+(2 × d₁ × r₂ + 2 × d₂ × r₂) +
+(2 × d₂ × r₃ + 2 × d₃ × r₃)
+
+---
 
 ### After Pruning
 
-\[
-\text{FLOPs}_{after} =
-(2 d_0 r_1' + 2 d_1 r_1') +
-(2 d_1 r_2' + 2 d_2 r_2') +
-(2 d_2 r_3' + 2 d_3 r_3')
-\]
+FLOPs_after =
+(2 × d₀ × r₁′ + 2 × d₁ × r₁′) +
+(2 × d₁ × r₂′ + 2 × d₂ × r₂′) +
+(2 × d₂ × r₃′ + 2 × d₃ × r₃′)
 
 ---
 
 ### FLOPs Reduction
 
-\[
-\text{FLOPs Reduction (\%)} =
-\left(1 - \frac{\text{FLOPs}_{after}}{\text{FLOPs}_{before}} \right) \times 100
-\]
+FLOPs Reduction (%) =
+(1 − FLOPs_after / FLOPs_before) × 100
 
 ---
 
