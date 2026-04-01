@@ -13,7 +13,7 @@
 
 ---
 
-## 2. Base / Reference Paper(s)
+## 2. Base paper
 
 **Low-Rank Training of Deep Neural Networks**  
 Paper link: https://arxiv.org/abs/2004.09031
@@ -185,3 +185,6 @@ All the simulations have been performed in MATLAB 2024b on an Intel core i5 CPU
 | Hybrid Version | Fashion-MNIST | 84.12 | **79.15** |
 
 ---
+## 10.References
+1.**Low-Rank Training of Deep Neural Networks**(Base paper), Paper link: https://arxiv.org/abs/2004.09031
+2. Bi-PIL: Bidirectional Gradient-Free Learning Scheme for Multilayer Neural Networks, IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 36, NO. 9, SEPTEMBER 2025.
