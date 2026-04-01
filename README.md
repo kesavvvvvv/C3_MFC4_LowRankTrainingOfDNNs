@@ -237,6 +237,115 @@ All the simulations have been performed in MATLAB 2024b on an Intel core i5 CPU
 
 
 ### SVD Training Results
+This section explains how parameters are reduced, how parameters are calculated and the actual reduction we obtained for the proposed architecture
+- Parameters are the learnable values in a neural network.
+- FLOPs- They measure how much computation a model performs.
+Below is the explaination for how **parameter count** and **FLOPs** are computed for the SVD-parameterized neural network.
+
+### SVD Parameterization
+
+Each fully connected layer is represented using low-rank SVD decomposition:
+
+\[
+W = U \cdot S \cdot V^T
+\]
+
+Where:
+- \( U \in \mathbb{R}^{d_{out} \times r} \)
+- \( V \in \mathbb{R}^{d_{in} \times r} \)
+- \( S \in \mathbb{R}^{r \times r} \) (diagonal, stored as vector)
+
+So instead of storing \( d_{out} \times d_{in} \), we store:
+- \( U \): \( d_{out} \cdot r \)
+- \( V \): \( d_{in} \cdot r \)
+- Singular values: \( r \)
+
+---
+
+### Parameter Count
+
+### Before Pruning
+
+Ranks are initialized as:
+- \( r_1 = \min(d_1, d_0) \)
+- \( r_2 = \min(d_2, d_1) \)
+- \( r_3 = \min(d_3, d_2) \)
+
+Total parameters:
+
+\[
+\text{Params} =
+(d_1 r_1 + d_0 r_1 + r_1) +
+(d_2 r_2 + d_1 r_2 + r_2) +
+(d_3 r_3 + d_2 r_3 + r_3)
+\]
+
+### After Pruning
+
+After energy-based pruning, ranks reduce to:
+- \( r_1', r_2', r_3' \)
+
+\[
+\text{Params}_{pruned} =
+(d_1 r_1' + d_0 r_1' + r_1') +
+(d_2 r_2' + d_1 r_2' + r_2') +
+(d_3 r_3' + d_2 r_3' + r_3')
+\]
+
+### Compression Ratio
+
+\[
+\text{Compression Ratio} = \frac{\text{Params}_{before}}{\text{Params}_{after}}
+\]
+
+---
+
+## FLOPs Computation
+
+Only forward pass FLOPs per sample are considered.
+
+Each SVD layer performs:
+
+1. \( V^T x \) → cost ≈ \( d_{in} \cdot r \)  
+2. \( S(\cdot) \) → negligible  
+3. \( U(\cdot) \) → cost ≈ \( d_{out} \cdot r \)
+
+Considering multiply + add → factor of 2:
+
+\[
+\text{FLOPs per layer} \approx 2 \cdot d_{in} \cdot r + 2 \cdot d_{out} \cdot r
+\]
+
+---
+
+### Before Pruning
+
+\[
+\text{FLOPs}_{before} =
+(2 d_0 r_1 + 2 d_1 r_1) +
+(2 d_1 r_2 + 2 d_2 r_2) +
+(2 d_2 r_3 + 2 d_3 r_3)
+\]
+
+### After Pruning
+
+\[
+\text{FLOPs}_{after} =
+(2 d_0 r_1' + 2 d_1 r_1') +
+(2 d_1 r_2' + 2 d_2 r_2') +
+(2 d_2 r_3' + 2 d_3 r_3')
+\]
+
+---
+
+### FLOPs Reduction
+
+\[
+\text{FLOPs Reduction (\%)} =
+\left(1 - \frac{\text{FLOPs}_{after}}{\text{FLOPs}_{before}} \right) \times 100
+\]
+
+---
 
 ### MNIST
 
