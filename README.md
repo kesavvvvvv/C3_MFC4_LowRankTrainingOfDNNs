@@ -30,7 +30,7 @@ Modern deep neural networks are computationally expensive and memory-intensive, 
 
 In this project, we implement low-rank training of neural networks using SVD-based parameterization, where each fully connected layer is represented directly by its singular vectors and singular values instead of full weight matrices. The model is trained on these SVD components without performing repeated decompositions during training, while enforcing orthogonality constraints on the singular vectors and sparsity constraints on the singular values to preserve SVD properties and encourage a low effective rank.
 
-Experiments are conducted on the MNIST dataset using a standard DNN architecture and its SVD-modified counterpart. The performance is evaluated in terms of accuracy, loss convergence, and parameter reduction, demonstrating the trade-off between compression and predictive performance.
+Experiments are conducted on the MNIST, Fashion-MNIST datasets using a standard DNN architecture and its SVD-modified counterpart. The performance is evaluated in terms of accuracy and parameter reduction, demonstrating the trade-off between compression and predictive performance.
 
 ---
 ## Process Flow
@@ -235,7 +235,35 @@ All the simulations have been performed in MATLAB 2024b on an Intel core i5 CPU
 | Hybrid Version | MNIST | 94.27 | **138.61** |
 | Hybrid Version | Fashion-MNIST | 84.12 | **79.15** |
 
+
+### SVD Training Results
+
+### MNIST
+
+| Metric                     | Before Pruning | After Pruning |
+|--------------------------|----------------|----------------|
+| Rank of Weight Matrices  | [128, 64, 10]  | [82, 43, 8]    |
+| Parameters               | 129,966        | 83,765         |
+| FLOPs                    | 259,528        | 167,264        |
+
+- **Parameters Compression Ratio**: 1.55×  
+- **FLOPs Reduction**: 35.55%  
+
 ---
+
+### Fashion MNIST
+
+| Metric                     | Before Pruning | After Pruning |
+|--------------------------|----------------|----------------|
+| Rank of Weight Matrices  | [128, 64, 10]  | [75, 40, 7]    |
+| Parameters               | 129,966        | 76,720         |
+| FLOPs                    | 259,528        | 153,196        |
+
+- **Parameters Compression Ratio**: 1.69×  
+- **FLOPs Reduction**: 40.97%  
+
+---
+
 ## 10.References
 1. **Low-Rank Training of Deep Neural Networks**(Base paper), Paper link: https://arxiv.org/abs/2004.09031
 2.  Bi-PIL: Bidirectional Gradient-Free Learning Scheme for Multilayer Neural Networks, IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 36, NO. 9, SEPTEMBER 2025.
