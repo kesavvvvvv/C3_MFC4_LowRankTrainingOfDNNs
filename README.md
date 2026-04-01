@@ -1,3 +1,5 @@
+![Process Flow](assets/Amrita.png)
+# Mathematics for Computing-4
 # Low Rank Training of Deep Neural Networks (DNNs)
 
 ---
@@ -33,6 +35,55 @@ Experiments are conducted on the MNIST dataset using a standard DNN architecture
 ---
 ## Process Flow
 ![Process Flow](assets/process.jpeg)
+
+
+##  Dataset Description
+
+### MNIST Dataset
+
+The **MNIST (Modified National Institute of Standards and Technology)** dataset is a benchmark dataset for handwritten digit recognition. It is widely used for training and evaluating machine learning and deep learning models in computer vision.
+
+### Key Features
+
+- **Total Samples**: 70,000 grayscale images  
+  - Training set: 60,000 images  
+  - Test set: 10,000 images  
+- **Image Size**: 28 × 28 pixels  
+- **Color Format**: Grayscale (pixel values range from 0 to 255)  
+- **Classes**: 10 (digits from 0 to 9)  
+
+### Data Structure
+
+Each image represents a single handwritten digit centered in a 28×28 frame. The dataset is preprocessed and normalized for easy use in machine learning pipelines.
+
+---
+### Fashion MNIST Dataset
+
+The **Fashion MNIST** dataset is a modern replacement for MNIST, designed to provide a more challenging classification task. It consists of grayscale images of fashion products from 10 categories.
+
+###  Key Features
+
+- **Total Samples**: 70,000 grayscale images  
+  - Training set: 60,000 images  
+  - Test set: 10,000 images  
+- **Image Size**: 28 × 28 pixels  
+- **Color Format**: Grayscale (pixel values range from 0 to 255)  
+- **Classes**: 10 fashion categories  
+
+###  Class Labels
+
+| Label | Category        |
+|------|-----------------|
+| 0    | T-shirt/top     |
+| 1    | Trouser         |
+| 2    | Pullover        |
+| 3    | Dress           |
+| 4    | Coat            |
+| 5    | Sandal          |
+| 6    | Shirt           |
+| 7    | Sneaker         |
+| 8    | Bag             |
+| 9    | Ankle boot      |
 
 
 ## Our Architecture for the project(Standard DNN)
