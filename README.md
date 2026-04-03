@@ -1,4 +1,4 @@
-![Process Flow](assets/Amrita.png)
+![amrita_logo](assets/Amrita.png)
 # Mathematics for Computing-4
 # Low Rank Training of Deep Neural Networks (DNNs)
 
